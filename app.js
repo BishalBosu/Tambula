@@ -5,10 +5,14 @@ require("dotenv").config()
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser")
 
 
 
 //importing routes
+const registerRoutes = require('./routes/register')
+const ticketRoutes = require('./routes/ticket')
+
 
 const app = express();
 
@@ -17,8 +21,18 @@ const app = express();
 //to make the public folder available to clients
 app.use(express.static(path.join(__dirname, "public")));
 
-//activating the routes
 
+app.use(bodyParser.json({ extended: false }))
+
+//making routes active
+app.use("/user", registerRoutes);
+app.use("/ticket", ticketRoutes);
+
+
+
+app.use((req, res, next) => {
+	res.redirect("/views/html/login.html")
+})
 
 
 
