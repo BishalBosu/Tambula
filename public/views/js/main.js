@@ -18,7 +18,6 @@ async function addOneTicket() {
 			}
 		)
 
-		
 		const response = await axios.get(`${url}/ticket/ticketsCount`, {
 			headers: { Authorization: token },
 		})
@@ -34,19 +33,35 @@ async function addOneTicket() {
 }
 
 function showItem(obj) {
-	// Create an HTML table string
-	let tableHTML = "<table>"
-	for (const [ticket, data] of Object.entries(obj)) {
-		tableHTML += '<tr><th colspan="9">' + ticket + "</th></tr>"
-		for (const row of data) {
-			tableHTML += "<tr>"
-			for (const cell of row) {
-				tableHTML += "<td>" + cell + "&nbsp;&nbsp;&nbsp; </td>"
-			}
-			tableHTML += "</tr>"
-		}
-	}
-	tableHTML += "</table>"
+	let table = "<table>"
 
-	document.getElementById("tickets-container").innerHTML += tableHTML
+	// Generate table header
+	table += "<thead><tr>"
+	table += "<th>Ticket ID</th>"
+	table += "<th>Values</th>"
+	table += "</tr></thead>"
+
+	// Generate table body
+	table += "<tbody>"
+	obj.forEach((ticket) => {
+		table += "<tr>"
+
+			table += `<td>${ticket._id}&nbsp&nbsp&nbsp</td>&nbsp&nbsp&nbsp`
+			table += '<td><table class="inner-table">'
+			ticket.ticket.forEach((row) => {
+				table += "<tr>"
+				row.forEach((value) => {
+					table += `<td>${value} &nbsp&nbsp&nbsp</td>`
+				})
+				table += "</tr>"
+			})
+			table += "</table><br></td>"
+
+		table += "</tr>"
+	})
+	table += "</tbody>"
+
+	table += "</table>"
+
+	document.getElementById("tickets-container").innerHTML += table
 }

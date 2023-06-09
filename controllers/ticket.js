@@ -49,8 +49,8 @@ exports.postAddTicket = async (req, res, next) => {
 	try {
 		let newTicket = await generate_random_tambula_ticket()
 
-		await req.user.addTicket(newTicket)
-		res.json({ message: "ticket added successfully" })
+		let generatedTicket = await req.user.addTicket(newTicket)
+		res.json({ticketID: generatedTicket, message: "ticket added successfully" })
 	} catch (err) {
 		console.log(err)
 		res.status(500).json({ message: "internal error" })
@@ -66,16 +66,7 @@ exports.getTicketPage = (req, res, next) => {
 		const tickets = req.user.tickets
 		const start_index = (pageno - 1) * pagelen
 
-		// Create an object to store the selected tickets
-		const selectedTickets = {};
-
-		// Loop through the keys and select the corresponding arrays based on start index and number of elements
-       
-		for (let i = start_index; i < start_index + +pagelen; i++) {
-			
-			selectedTickets[`ticket${i+1}`] = tickets[`ticket${i+1}`]
-		}
-
+		let selectedTickets = tickets.slice(start_index, start_index + +pagelen);
 		
 		res.json(selectedTickets)
 	} catch (err) {

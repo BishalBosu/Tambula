@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
 const userSchema = new Schema({
-    email: {
+	email: {
 		type: String,
 		required: true,
 	},
@@ -15,27 +15,42 @@ const userSchema = new Schema({
 		type: String,
 		required: true,
 	},
-	ticketsCount:{
+	ticketsCount: {
 		type: Number,
 		required: true,
 	},
-	
-	tickets: {
-        type: Object,
-        default: {},
-    }
 
-
-
+	tickets: [
+		{
+			_id: { 
+				type: Schema.Types.ObjectId, 
+				default: () => new mongoose.Types.ObjectId() 
+			},
+			ticket: { 
+				type: Object, 
+				default: []
+			},
+		},
+	],
 })
-userSchema.methods.addTicket = function (ticketArray) {	
-	this.ticketsCount += 1;
-	this.tickets[`ticket${this.ticketsCount}`] = ticketArray;
-	
-	this.markModified("tickets"); // Mark the "tickets" field as modified
+userSchema.methods.addTicket = async function (ticketArray) {
+	const newTicket = {
+        ticket: ticketArray,
+    };
 
-	this.save()
-	
+    this.tickets.push(newTicket);
+    this.ticketsCount += 1;
+
+    await this.save();
+	return this.tickets[this.tickets.length - 1]._id;
+
+
 }
+
+//to find any ticket by its _id
+//can be used
+userSchema.methods.findTicketById = function (ticketId) {
+    return this.tickets.find((ticket) => ticket._id.toString() === ticketId.toString());
+};
 
 module.exports = mongoose.model("User", userSchema)
