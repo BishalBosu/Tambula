@@ -1,0 +1,16 @@
+{
+  "name": "tambula",
+  "version": "1.0.0",
+  "description": "tambula app to generate tickets for a perticular user",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "startDev": "nodemon app.js"
+  },
+  "author": "Bishal Bosu",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
