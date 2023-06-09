@@ -44,3 +44,7 @@ TOKEN_PRIVATE_KEY="anyPrivateKey"
 
 
 #I added front end to better visualization
+
+#packages I added for extra optimization.
+compression : to compress responses to make it faster
+morgan: to log access data

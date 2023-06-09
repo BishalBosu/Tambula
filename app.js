@@ -4,9 +4,16 @@ require("dotenv").config()
 //importing packages
 const express = require("express");
 const path = require("path");
+const fs = require("fs")
+
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser")
 
+//for optimization
+const compression = require("compression")
+const morgan = require("morgan")
+
+const cors = require("cors")
 
 
 //importing routes
@@ -20,7 +27,20 @@ const app = express();
 
 //to make the public folder available to clients
 app.use(express.static(path.join(__dirname, "public")));
+const accessLogStream = fs.createWriteStream(
+	path.join(__dirname, "access.log"),
+	{ flags: "a" }
+)
 
+
+app.use(compression())
+app.use(morgan("combined", { stream: accessLogStream }))
+
+
+// app.use(cors({
+//   "origin": "*",
+//   "methods": "GET,POST,DELETE",
+// }))
 
 app.use(bodyParser.json({ extended: false }))
 
